@@ -5,6 +5,7 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'web-tracing',
   description: '行为埋点 & 性能采集 & 异常采集 & 请求采集 & 路由采集',
+  lastUpdated: true,
   base: '/web-tracing',
   cleanUrls: true,
   appearance: 'dark',
