@@ -30,25 +30,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3 # 如果使用 pnpm，请取消此区域注释
+        with:
+          fetch-depth: 0 # 0获取所有git提交历史记录，默认为1，1表示只获取最近的一次提交记录
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4 # 如果使用 pnpm，请取消注释
         with:
           version: 9
+      # - uses: oven-sh/setup-bun@v1 # 如果使用 Bun，请取消注释
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-      - name: Setup Pages
+          # 缓存管理器设置为npm
+          cache: pnpm # 或 pnpm / yarn
+      - name: 设置 GitHub Pages 的环境
         uses: actions/configure-pages@v4
-      - name: Install dependencies
-        run: pnpm install
-      - name: Build with VitePress
-        run: pnpm docs:build
-      - name: Upload artifact
+      - name: 安装项目依赖
+        # 运行命令行指令，这里使用npm ci表示的是check install,比传统的npm install更快
+        run: pnpm install # 或 pnpm install / yarn install / bun install
+      - name: 打包 vitePress
+        # 运行vitePress中的构建指令
+        run: pnpm docs:build # 或 pnpm docs:build / yarn docs:build / bun run docs:build
+        # 将构建好的包上传为流水线的工件（artifact）
+        timeout-minutes: 1 # 设置此步骤的超时时间为1分钟
+        continue-on-error: true # 即使此步骤失败，也继续执行流水线
+      - name: 上传 artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/.vitepress/dist
+          path: .vitepress/dist
 
   # 部署工作
   deploy:
