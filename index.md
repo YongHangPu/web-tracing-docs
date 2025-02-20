@@ -2,7 +2,7 @@
 layout: home
 
 title: WebTracing
-titleTemplate: 埋点
+titleTemplate: 前端监控方案
 
 hero:
   name: WebTracing
